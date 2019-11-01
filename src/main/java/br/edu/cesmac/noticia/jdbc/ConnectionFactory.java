@@ -8,7 +8,7 @@ public class ConnectionFactory {
 
 	public Connection getConnection() {
 		try {
-			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/noticiasSI", "postgres", "post");
+			return DriverManager.getConnection("jdbc:postgresql://localhost:5432/noticiasSI", "postgres", "postgres");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

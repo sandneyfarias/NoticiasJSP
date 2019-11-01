@@ -17,19 +17,15 @@ public class EditoriaDao {
 		this.connection = new ConnectionFactory().getConnection();
 	}
 
-	public void adiciona(Editoria editoria) {
+	public void adiciona(Editoria editoria) throws SQLException {
 		String sql = "INSERT INTO editoria" + " (nome)" + " values (?)";
 
-		try {
 			PreparedStatement stmt;
 
 			stmt = this.connection.prepareStatement(sql);
 			stmt.setString(1, editoria.getNome());
 			stmt.execute();
 			stmt.close();
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
 	}
 
 	public void altera(Editoria editoria) {
@@ -66,7 +62,7 @@ public class EditoriaDao {
 	}
 	
 
-	public List<Editoria> lista() {
+	public List<Editoria> getLista() {
 		List<Editoria> editorias = new ArrayList<Editoria>();
 
 		try {
