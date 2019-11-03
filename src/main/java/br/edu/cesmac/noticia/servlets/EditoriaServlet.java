@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.edu.cesmac.noticia.dao.EditoriaDao;
 import br.edu.cesmac.noticia.model.Editoria;
 
-@WebServlet("/editoria")
+@WebServlet(urlPatterns = {"/editoria", "/editoria/", "/editoria/nova", "/editoria/adiciona", "/editoria/remove", "/editoria/altera", "/editoria/edita"})
 public class EditoriaServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -30,14 +30,16 @@ public class EditoriaServlet extends HttpServlet {
 		String acao = request.getServletPath();
 
 		try {
-			if (acao.equals("adiciona")) {
+			if (acao.equals("/editoria/adiciona")) {
 				adiciona(request, response);
-			} else if (acao.equals("altera")) {
-				// busca a lista no DAO
-				// despacha para um jsp
-			} else if (acao.equals("remove")) {
-				// busca a lista no DAOhttps://www.javaguides.net/2019/03/jsp-servlet-jdbc-mysql-crud-example-tutorial.html
-				// despacha para um jsp				
+			} else if (acao.equals("/editoria/altera")) {
+				altera(request, response);				
+			} else if (acao.equals("/editoria/nova")) {
+				nova(request, response);
+			} else if (acao.equals("/editoria/edita")) {
+				edita(request, response);				
+			} else if (acao.equals("/editoria/remove")) {
+				remove(request, response);
 			} else {
 				lista(request, response);
 			}
@@ -50,31 +52,50 @@ public class EditoriaServlet extends HttpServlet {
 			throws SQLException, IOException, ServletException {
 		Editoria editoria = new Editoria();
 		editoria.setNome(request.getParameter("nome"));
+
 		try {
 			editoriaDao.adiciona(editoria);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/editoria/mostra.jsp");
-
-		try {
-			rd.forward(request, response);
-		} catch (ServletException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		response.sendRedirect("/editoria");
 	}
 
 	private void altera(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
+		Editoria editoria = new Editoria();
+		editoria.setIdEditoria(Integer.parseInt(request.getParameter("id")));
+		editoria.setNome(request.getParameter("nome"));
 
+		editoriaDao.altera(editoria);
+		response.sendRedirect("/editoria");
 	}
+
+	private void nova(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Editoria editoria = new Editoria();
+		request.setAttribute("editoria", editoria);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/editoria/manter.jsp");	
+		dispatcher.forward(request, response);	
+	}
+	
+	private void edita(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Editoria editoria = new Editoria();
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		editoria = editoriaDao.getById(id);
+        request.setAttribute("editoria", editoria);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/editoria/manter.jsp");	
+		dispatcher.forward(request, response);	
+	}	
 
 	private void remove(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
+		Editoria editoria = new Editoria();
+		editoria.setIdEditoria(Integer.parseInt(request.getParameter("id")));
 
+		editoriaDao.remove(editoria);
+		response.sendRedirect("/editoria");
 	}
 
 	private void lista(HttpServletRequest request, HttpServletResponse response)
@@ -83,16 +104,6 @@ public class EditoriaServlet extends HttpServlet {
         request.setAttribute("editorias", editorias);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/editoria/consulta.jsp");
         dispatcher.forward(request, response);		
-
-	}
-
-	private void showAltera(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
-
-	}
-
-	private void showEdita(HttpServletRequest request, HttpServletResponse response)
-			throws SQLException, IOException, ServletException {
 
 	}
 

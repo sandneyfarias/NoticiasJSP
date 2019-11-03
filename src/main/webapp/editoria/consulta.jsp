@@ -13,9 +13,8 @@
 		<title>Gerenciador de Notícias</title>
 		
 		<!-- Bootstrap core CSS -->
-		<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"
-			rel="stylesheet" />
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">			
+		<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">			
 		
 		
 		<style>
@@ -67,8 +66,8 @@
 							${editoria.nome}
 						</td>
 						<td>
-							<button type="button" class="btn btn-labeled btn-warning"><span class="btn-label"><i class="fas fa-edit"></i></span> </button>
-							<button type="button" class="btn btn-labeled btn-danger"><span class="btn-label"><i class="far fa-trash-alt"></i></span> </button>						
+							<a href="/editoria/edita?id=<c:out value='${editoria.idEditoria}'/>" class="btn btn-labeled btn-warning" role="button"><span class="btn-label"><i class="fas fa-edit"></i></span> </a>
+							<a href="/editoria/remove?id=<c:out value='${editoria.idEditoria}'/>" class="btn btn btn-labeled btn-danger" role="button"><span class="btn-label"><i class="fas fa-edit"></i></span> </a>							
 						</td>
 		            </tr>  
 					</c:forEach>

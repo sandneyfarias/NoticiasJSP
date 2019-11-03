@@ -34,10 +34,10 @@ public class EditoriaDao {
 					+ " WHERE idEditoria = ? ";
 
 		try {
-			PreparedStatement stmt;
-
+			PreparedStatement stmt = null;
 			stmt = this.connection.prepareStatement(sql);
-			stmt.setLong(1, editoria.getIdEditoria());
+			stmt.setString(1, editoria.getNome());
+			stmt.setLong(2, editoria.getIdEditoria());
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
@@ -61,6 +61,31 @@ public class EditoriaDao {
 		}
 	}
 	
+	public Editoria getById(Integer id) {
+		Editoria editoria = new Editoria();
+
+		String sql = "SELECT idEditoria, nome " 
+				+ " FROM editoria " 
+				+ " WHERE idEditoria = ?";
+
+		try {
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
+			stmt.setLong(1, id);
+			ResultSet resultado = stmt.executeQuery();
+			
+			while (resultado.next()) {
+				editoria.setIdEditoria(resultado.getInt("idEditoria"));
+				editoria.setNome(resultado.getString("nome"));
+			}
+
+			resultado.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+		return editoria;
+	}	
 
 	public List<Editoria> getLista() {
 		List<Editoria> editorias = new ArrayList<Editoria>();
